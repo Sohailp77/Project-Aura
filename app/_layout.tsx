@@ -1,39 +1,49 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { SafeAreaView, Text, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { Slot, useRouter } from "expo-router";
+import "../global.css";
+import React, { useEffect } from "react";
+import { AuthProvider, useAuth } from "../lib/AuthProvider"; // Import both
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+const AuthWrapper = () => {
+  const { user, loading, error } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    if (!loading) {
+      if (error) {
+        console.error("Network Error:", error);
+      } else if (user) {
+        router.replace("/home");
+      } else {
+        router.replace("/");
+      }
     }
-  }, [loaded]);
+  }, [user, loading, error]);
 
-  if (!loaded) {
-    return null;
-  }
+  if (loading) return 
+  <View className="flex items-center self-center justify-center flex-1"><Text>Loading...</Text></View>;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <SafeAreaView className="flex-1 bg-white">
+      <StatusBar style="light" backgroundColor="#ffff" />
+      {error ? (
+        <View className="items-center justify-center flex-1">
+          <Text className="text-lg text-red-500">{error}</Text>
+        </View>
+      ) : (
+        <Slot />
+      )}
+    </SafeAreaView>
   );
-}
+};
+
+const RootLayout = () => {
+  return (
+    <AuthProvider> 
+      <AuthWrapper /> 
+    </AuthProvider>
+  );
+};
+
+export default RootLayout;
