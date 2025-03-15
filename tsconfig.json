@@ -15,5 +15,5 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "nativewind-env.d.ts"
-, "app/component/otpmodal.jsx", "app/component/bottomNavigation.jsx"  ]
+, "app/component/otpmodal.jsx", "app/component/bottomNavigation.jsx", "app/(home)/profile.jsx"  ]
 }

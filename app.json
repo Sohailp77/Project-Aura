@@ -10,10 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "package":"com.jsm.aura"
+      "package": "com.jsm.aura"
     },
     "android": {
-      "package":"com.jsm.aura",
+      "package": "com.jsm.aura",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -39,6 +39,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "c9fc3da7-7122-48b0-9f86-21aa24baa772"
+      }
     }
   }
 }
